@@ -1,0 +1,54 @@
+:root{--soft:#333}
+:root{--bg:#f5f5f3;--fg:#0a0a0a;--mid:#6b6b6b;--line:#dcdcd8;--card:#fff;--ember:#C6601F;--deep:#0F3D3E;--cream:#EADCC8;--ease:cubic-bezier(.2,.7,.1,1);--safe-b:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{background:var(--bg);color:var(--fg);font-family:'Inter Tight',system-ui,sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 28px}
+@media (pointer:fine){.cursor{display:block}a,button{cursor:none!important}}
+.back{font-size:14px;font-weight:500;text-decoration:none;position:relative;padding:4px 0}
+.back::after{content:"";position:absolute;left:0;bottom:-2px;height:1.5px;width:0;background:var(--ember);transition:width .4s var(--ease)}
+.back:hover::after{width:100%}
+.hero{padding:150px 0 40px}
+.label{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);display:flex;align-items:center;gap:12px;margin-bottom:24px}
+h1{font-size:clamp(56px,10vw,120px);letter-spacing:-.055em;line-height:.9;font-weight:800}
+h1 .row{display:block;overflow:hidden;padding-bottom:.06em}
+h1 .row span{display:inline-block;transform:translateY(110%);animation:rise 1.1s var(--ease) forwards;animation-delay:var(--d)}
+h1 .ember{color:var(--ember)}
+@keyframes rise{to{transform:none}}
+.meta{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mid);margin-top:26px}
+.posts{margin-top:60px;display:grid;gap:22px}
+.post{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px}
+.post small{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mid)}
+.post h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.035em;line-height:1.05;margin:10px 0 12px}
+.post .excerpt{color:var(--mid);font-size:17px;margin-bottom:14px}
+.post .body{font-size:16px;line-height:1.7}
+.post .body p{margin:0 0 12px}
+.post .body h3{font-size:22px;letter-spacing:-.02em;margin:22px 0 8px}
+.post .body ul{padding-left:22px;margin:0 0 12px}
+.post .body a{color:var(--ember)}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:90px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mid)}
+footer a{color:var(--fg)}
+footer a:hover{color:var(--ember)}
+@media (max-width:620px){.wrap{padding:0 22px}.hero{padding-top:120px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}h1 .row span{transform:none}}
+html[data-theme="dark"]{--soft:#d8d8d4;--bg:#0d0d0c;--fg:#f2f2ef;--mid:#9a9a96;--line:#2a2a28;--card:#161615;color-scheme:dark}
+html[data-theme="dark"] .top.scrolled{background:rgba(13,13,12,.85)}
+
+/* dock */
+.dock{position:fixed;left:50%;bottom:calc(16px + var(--safe-b));transform:translate(-50%,160%);opacity:0;z-index:150;display:flex;gap:2px;padding:6px;background:#C6601F;border-radius:999px;box-shadow:0 22px 50px -18px rgba(198,96,31,.55);transition:transform .45s var(--ease),opacity .3s;max-width:calc(100vw - 24px)}
+.dock.show{transform:translate(-50%,0);opacity:1}
+.dock-pill{position:absolute;top:6px;bottom:6px;left:6px;width:0;border-radius:999px;background:#EADCC8;transition:left .55s var(--ease),width .55s var(--ease)}
+.dock a{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 16px;min-width:66px;border-radius:999px;text-decoration:none;color:#F6E7D6;font-size:11px;font-weight:500;transition:color .4s}
+.dock a svg{width:20px;height:20px;transition:transform .5s var(--ease)}
+.dock a:hover svg{transform:translateY(-3px)}
+.dock a.active{color:#0F3D3E}
+@media (max-width:560px){
+  .dock a{min-width:54px;padding:9px 10px;font-size:10px}
+}
+
+/* no grey box when tapping links or the bottom nav; keyboard focus still visible */
+a,button{-webkit-tap-highlight-color:transparent}
+.dock a{-webkit-tap-highlight-color:transparent;background:transparent}
+.dock a:focus,.dock a:active{outline:none;background:transparent}
+.dock a:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+
+.post .body img{display:block;max-width:100%;height:auto;border-radius:14px;margin:18px 0}
