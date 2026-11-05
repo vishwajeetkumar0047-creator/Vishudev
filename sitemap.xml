@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://YOUR-DOMAIN/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://YOUR-DOMAIN/services.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://YOUR-DOMAIN/store.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://YOUR-DOMAIN/blog.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://YOUR-DOMAIN/about.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://YOUR-DOMAIN/contact.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://YOUR-DOMAIN/legal.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://vexron.online/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://vexron.online/services.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vexron.online/store.html</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vexron.online/blog.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vexron.online/about.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://vexron.online/contact.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vexron.online/legal.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
