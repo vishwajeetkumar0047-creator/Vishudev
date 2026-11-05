@@ -5,4 +5,4 @@ Disallow: /checkout.html
 Disallow: /product.html
 Disallow: /reset.html
 
-Sitemap: https://YOUR-DOMAIN/sitemap.xml
+Sitemap: https://vexron.online/sitemap.xml
