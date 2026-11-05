@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://rlpdzahhbcngqnynmzie.supabase.co; connect-src 'self' https://rlpdzahhbcngqnynmzie.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Packages for Discord bots and websites. Log in to see prices and order online.">
+<meta name="theme-color" content="#f5f5f3">
+<meta property="og:title" content="Store — Vishu">
+<meta property="og:description" content="Packages for Discord bots and websites. Log in to see prices and order online.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vishu">
+<link rel="icon" href="favicon.png" type="image/png">
+<title>Store — Vishu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://rlpdzahhbcngqnynmzie.supabase.co" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/store.css">
+<script src="js/theme.js"></script>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="canonical" href="https://YOUR-DOMAIN/store.html">
+<meta property="og:image" content="https://YOUR-DOMAIN/og-image.png">
+<meta property="og:url" content="https://YOUR-DOMAIN/store.html">
+<meta name="twitter:card" content="summary_large_image">
+<script defer src="js/app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div id="progress"></div>
+<div class="cursor" id="cursor"></div>
+
+<header class="top" id="topbar">
+  <a class="logo" href="index.html"><img class="brand-mark" src="brand/avatar.png" alt="" width="44" height="44">VISHU</a>
+  <nav>
+    <a href="about.html">About</a>
+    <a href="store.html" class="on">Store</a>
+    <a href="services.html">Services</a>
+    <a href="blog.html">Blog</a>
+    <a href="contact.html">Contact</a>
+    <a id="adminLink" href="admin.html" hidden>Admin</a>
+  </nav>
+  <div class="who" id="who" hidden>
+    <span id="whoEmail"></span>
+    <a class="icon-link" href="orders.html" title="My orders" aria-label="My orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg></a>
+    <a class="icon-link" href="checkout.html" title="Cart" aria-label="Cart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 11.2a1.5 1.5 0 0 0 1.5 1.2h8.6a1.5 1.5 0 0 0 1.5-1.2L21 7H6"/></svg><span class="cart-badge" data-cart-count>0</span></a>
+    <button id="logoutBtn" type="button">Log out</button>
+  </div>
+<button class="theme-btn" id="themeBtn" type="button" aria-label="Switch to dark mode">☾</button>
+</header>
+<span id="main" tabindex="-1"></span>
+
+<!-- GATE (logged out) -->
+<section class="page" id="gate" style="padding-top:130px" hidden>
+  <div class="wrap">
+    <div class="label"><b>01</b> Store access</div>
+    <div class="gate">
+      <div class="gate-copy">
+        <h2 class="r">Members only.</h2>
+        <p class="r">Packages and pricing are for registered clients. Create an account or log in to continue.</p>
+        <ul class="r">
+          <li>Bot and website package details</li>
+          <li>Quotes and order requests</li>
+          <li>Tracking for your ongoing projects</li>
+        </ul>
+      </div>
+      <div class="auth r" id="authBox">
+        <div class="tabs" id="tabs">
+          <span class="slider"></span>
+          <button type="button" class="on" data-mode="login">Log in</button>
+          <button type="button" data-mode="signup">Sign up</button>
+        </div>
+        <form id="authForm" novalidate>
+          <div class="field">Email
+            <input type="email" id="email" required placeholder="you@email.com" autocomplete="email">
+          </div>
+          <div class="field">Password
+            <input type="password" id="password" required minlength="8" placeholder="At least 8 characters" autocomplete="current-password">
+          </div>
+          <div class="field" id="confirmRow" hidden>Confirm password
+            <input type="password" id="confirm" placeholder="Repeat password" autocomplete="new-password">
+          </div>
+          <button class="submit" type="submit" id="submitBtn">Log in →</button>
+          <div class="msg" id="msg" role="status"></div>
+          <div id="forgotRow"><button type="button" class="linkbtn" id="forgotBtn">Forgot password?</button></div>
+        </form>
+        <p class="note">Your account is stored securely on our server. Log in to see the packages.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORE (logged in) -->
+<section class="page" id="app" style="padding-top:130px" hidden>
+  <div class="wrap">
+    <div class="label"><b>01</b> Store</div>
+    <h1 style="font-size:clamp(56px,9vw,130px)">Packages.</h1>
+    <p class="welcome r">Welcome back. Pick a package below, or request a custom quote.</p>
+
+    <div class="shop-tools">
+      <button type="button" class="filter-btn" id="filterBtn" aria-expanded="false" aria-controls="filterPanel">
+        Filter &amp; sort <span class="filter-count" id="filterCount" hidden></span>
+      </button>
+      <span class="mono" id="resultCount"></span>
+    </div>
+    <div class="filter-panel" id="filterPanel" hidden>
+      <div class="fgroup">
+        <span class="flabel">Price</span>
+        <button class="chip on" type="button" data-f-price="all">All</button>
+        <button class="chip" type="button" data-f-price="free">Free</button>
+        <button class="chip" type="button" data-f-price="paid">Paid</button>
+      </div>
+      <div class="fgroup">
+        <span class="flabel">Category</span>
+        <button class="chip on" type="button" data-f-cat="all">All</button>
+        <button class="chip" type="button" data-f-cat="Discord bots">Discord bots</button>
+        <button class="chip" type="button" data-f-cat="Websites">Websites</button>
+      </div>
+      <div class="fgroup">
+        <span class="flabel">Sort by</span>
+        <button class="chip on" type="button" data-f-sort="relevant">Most relevant</button>
+        <button class="chip" type="button" data-f-sort="recent">Most recent</button>
+        <button class="chip" type="button" data-f-sort="low">Price: low to high</button>
+        <button class="chip" type="button" data-f-sort="high">Price: high to low</button>
+      </div>
+      <button class="linkbtn" type="button" id="filterReset">Reset filters</button>
+    </div>
+
+    <div id="empty" class="empty r" hidden>
+      <h3>No packages are listed right now.</h3>
+      <p>Please check again later, or <a href="contact.html" style="color:var(--ember)">contact me</a> for a custom quote.</p>
+    </div>
+    <div id="packages"></div>
+
+    </div>
+</section>
+
+<!-- BOTTOM DOCK -->
+<footer class="site-footer" id="siteFooter">
+  <div class="sf-top">
+    <div>
+      <p class="sf-kicker">Let's work together</p>
+      <h2 class="sf-title">Have an idea?<br><span>Let's build it.</span></h2>
+    </div>
+    <a class="sf-cta" href="contact.html">Start a project <span aria-hidden="true">→</span></a>
+  </div>
+
+  <div class="sf-grid">
+    <div class="sf-brand">
+      <a class="sf-logo" href="index.html"><img class="brand-mark" src="brand/avatar.png" alt="" width="44" height="44">VISHU</a>
+      <p class="sf-tag" data-setting-text="footer_tagline">Websites &amp; Discord bots</p>
+    </div>
+    <nav class="sf-col" aria-label="Footer navigation">
+      <h3>Explore</h3>
+      <a href="store.html">Store</a>
+      <a href="services.html">Services</a>
+      <a href="blog.html">Blog</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="orders.html">My orders</a>
+    </nav>
+    <div class="sf-col">
+      <h3>Reach me</h3>
+      <a href="mailto:vishwajeetkumar0047@gmail.com" data-setting-href="contact_email" data-setting-text="contact_email">vishwajeetkumar0047@gmail.com</a>
+      <a href="#" target="_blank" rel="noopener" data-setting-href="social_discord" data-hide-empty>Discord</a>
+      <a href="#" target="_blank" rel="noopener" data-setting-href="social_github" data-hide-empty>GitHub</a>
+      <a href="#" target="_blank" rel="noopener" data-setting-href="social_linkedin" data-hide-empty>LinkedIn</a>
+    </div>
+  </div>
+
+  <div class="sf-word" aria-hidden="true">VISHU</div>
+
+  <div class="sf-bottom">
+    <span>© <span class="yr"></span> Vishu. All rights reserved.</span>
+    <span class="sf-legal">
+      <a href="legal.html#terms">Terms</a>
+      <a href="legal.html#privacy">Privacy</a>
+      <a href="#topbar">Back to top ↑</a>
+    </span>
+  </div>
+</footer>
+<nav class="dock" id="dock" aria-label="Main navigation">
+  <span class="dock-pill" id="pill"></span>
+  <a href="index.html" data-id="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+  <a href="store.html" data-id="store" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Store</a>
+  <a href="services.html" data-id="services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z"/></svg>Services</a>
+  <a href="blog.html" data-id="blog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg>Blog</a>
+  <a href="about.html" data-id="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>About</a>
+  <a href="contact.html" data-id="contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg>Contact</a>
+  <a id="adminDock" href="admin.html" data-id="admin" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Admin</a>
+</nav>
+
+<dialog id="lightbox" class="lb" aria-label="Photo preview">
+  <button class="lb-close" type="button" id="lbClose" aria-label="Close">×</button>
+  <button class="lb-nav lb-prev" type="button" id="lbPrev" aria-label="Previous photo">‹</button>
+  <img id="lbImg" alt="">
+  <button class="lb-nav lb-next" type="button" id="lbNext" aria-label="Next photo">›</button>
+  <p class="lb-pos mono" id="lbPos"></p>
+</dialog>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+<script defer src="js/db.js"></script>
+<script defer src="js/store.js"></script>
+</body>
+</html>

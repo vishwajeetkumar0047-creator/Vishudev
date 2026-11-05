@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://rlpdzahhbcngqnynmzie.supabase.co; connect-src 'self' https://rlpdzahhbcngqnynmzie.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Vishu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://rlpdzahhbcngqnynmzie.supabase.co" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="logo"><img class="brand-mark" src="brand/avatar.png" alt="" width="44" height="44">VISHU <span class="badge">ADMIN</span></div>
+  <div class="bar-right" id="barRight" hidden>
+    <span class="mono" id="whoEmail"></span>
+    <a class="btn sm" id="viewStore" href="store.html" target="_blank" rel="noopener">View store ↗</a>
+    <button class="btn sm" id="logoutBtn" type="button">Log out</button>
+  </div>
+</header>
+
+<!-- AUTH -->
+<main id="loadingView" class="auth">
+  <p class="mono" style="padding:140px 0;text-align:center;color:var(--mid)">Loading…</p>
+</main>
+<main id="authView" class="auth" hidden>
+  <div class="tabs" id="tabs">
+    <button type="button" class="on" data-mode="login">Log in</button>
+    <button type="button" data-mode="signup">Sign up</button>
+  </div>
+  <form id="authForm" novalidate>
+    <div class="field">Email <input type="email" id="email" required autocomplete="email"></div>
+    <div class="field">Password <input type="password" id="password" required minlength="8" autocomplete="current-password"></div>
+    <div class="field" id="confirmRow" hidden>Confirm password <input type="password" id="confirm" autocomplete="new-password"></div>
+    <button class="btn solid" type="submit" id="submitBtn" style="width:100%;justify-content:center;padding:13px">Log in →</button>
+    <div class="msg" id="msg"></div>
+  </form>
+</main>
+
+<!-- DENIED -->
+<main id="deniedView" class="auth" hidden>
+  <h2>Access denied</h2>
+  <p class="sub">This account does not have admin access.</p>
+  <p class="mono" style="margin-top:14px">Logged in as <span id="deniedEmail"></span></p>
+  <div style="margin-top:18px"><button class="btn" id="deniedLogout" type="button">Log out</button></div>
+</main>
+
+<!-- ADMIN -->
+<main id="adminView" class="wrap" hidden>
+  <h1>Dashboard.</h1>
+  <p class="sub">Manage store packages, accounts and backups. Only you can see this page.</p>
+
+  <div class="stats">
+    <div class="stat dark"><b id="sPkgs">0</b><span>PACKAGES LIVE</span></div>
+    <div class="stat acc"><b id="sHot">0</b><span>POPULAR PACKAGES</span></div>
+    <div class="stat"><b id="sAccounts">0</b><span>REGISTERED ACCOUNTS</span></div>
+    <div class="stat"><b id="sFeatures">0</b><span>TOTAL FEATURES LISTED</span></div>
+    <div class="stat"><b id="sPendingPay">0</b><span>PAYMENTS TO APPROVE</span></div>
+    <div class="stat"><b id="sUnread">0</b><span>UNREAD MESSAGES</span></div>
+    <div class="stat"><b id="sToday">0</b><span>ORDERS TODAY</span></div>
+    <div class="stat"><b id="sRevenue">₹0</b><span>REVENUE THIS MONTH</span></div>
+  </div>
+
+  <nav class="nav2" id="tabNav">
+    <button type="button" class="on" data-pane="packages">Packages</button>
+    <button type="button" data-pane="messages">Messages <span class="badge" id="unreadBadge" hidden></span></button>
+    <button type="button" data-pane="orders">Orders</button>
+    <button type="button" data-pane="blog">Blog</button>
+    <button type="button" data-pane="analytics">Analytics</button>
+    <button type="button" data-pane="settings">Settings</button>
+    <button type="button" data-pane="accounts">Accounts</button>
+    <button type="button" data-pane="backup">Backup</button>
+  </nav>
+
+  <!-- PACKAGES PANE -->
+  <section class="pane" id="pane-packages">
+    <div class="grid">
+      <div class="panel">
+        <h2 id="formTitle">Add package</h2>
+        <form id="pkgForm">
+          <div class="row2">
+            <div class="field" style="margin:0">Group
+              <select id="pGroup"><option>Discord bots</option><option>Websites</option></select>
+            </div>
+            <div class="field" style="margin:0">Tier label
+              <input id="pTier" placeholder="STARTER" maxlength="20" required>
+            </div>
+          </div>
+          <div class="field" style="margin-top:14px">Name
+            <input id="pName" placeholder="Moderation Bot" maxlength="60" required>
+          </div>
+          <div class="field">Short description
+            <input id="pDesc" placeholder="Core tools for a small community." maxlength="140">
+          </div>
+          <div class="field">Features (one per line)
+            <textarea id="pFeatures" placeholder="Auto-mod and warnings&#10;Welcome messages&#10;Mod logs"></textarea>
+          </div>
+          <div class="field">Price text
+            <input id="pPrice" placeholder="Leave empty for 'Price on request'" maxlength="40">
+          </div>
+          <div class="field">Price type
+            <select id="pType">
+              <option value="paid">Paid (client pays by UPI, you approve the payment)</option>
+              <option value="free">Free (client claims the reward at once, no payment)</option>
+            </select>
+          </div>
+          <div class="field">Online price (₹), leave empty if not sold online
+            <input id="pAmount" type="number" min="1" step="0.01">
+          </div>
+          <div class="field">Not included / extras
+            <textarea id="pExtra" maxlength="500" placeholder="Domain name, hosting, monthly fee…"></textarea>
+          </div>
+          <div class="reward-box">
+            <h4>Product reward</h4>
+            <p class="mono">Given to the client when this package's order is completed. You can change it for each order later.</p>
+            <div class="field">Reward title
+              <input id="rwTitle" maxlength="200" placeholder="e.g. Your Discord bot is ready">
+            </div>
+            <div class="field">Instructions, access details or links
+              <textarea id="rwContent" maxlength="10000" style="min-height:100px" placeholder="Step 1… Download: https://…"></textarea>
+            </div>
+            <div class="field">Reward file (optional, up to 50 MB)
+              <input id="rwFile" type="file">
+              <small class="mono" id="rwFileNote">No file.</small>
+            </div>
+            <label class="check" id="rwFileRemoveRow" hidden><input type="checkbox" id="rwFileRemove"> Remove current file</label>
+          </div>
+          <div class="field">Photos (up to 8, the first one is the cover)
+            <input type="file" id="pImage" multiple accept="image/png,image/jpeg,image/webp,image/gif">
+            <small class="mono" id="pImgNote">PNG, JPG, WebP or GIF, up to 2 MB each.</small>
+          </div>
+          <button class="btn sm" type="button" id="pLibBtn" style="margin-top:10px">Choose from library</button>
+          <div class="lib" id="pLib" hidden></div>
+          <div class="gallery-edit" id="pGallery" hidden></div>
+          <label class="check"><input type="checkbox" id="pHot"> Highlight as popular</label>
+          <div class="actions">
+            <button class="btn solid" type="submit" id="saveBtn">Add package</button>
+            <button class="btn" type="button" id="cancelEdit" hidden>Cancel edit</button>
+          </div>
+          <div class="msg" id="pMsg"></div>
+        </form>
+
+        <div class="preview" id="preview">
+          <small>PREVIEW</small>
+          <b id="prvName">Package name</b>
+          <small id="prvTier">TIER</small>
+          <ul id="prvList"></ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="toolbar">
+          <input id="search" type="search" placeholder="Search packages…">
+          <span class="mono" id="count"></span>
+        </div>
+        <div class="list" id="list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MESSAGES PANE -->
+  <section class="pane" id="pane-messages" hidden>
+    <div class="grid">
+      <div>
+        <div class="toolbar">
+          <input id="mSearch" type="search" placeholder="Search name, email or message…" style="flex:1;min-width:180px">
+          <span class="mono" id="msgCount"></span>
+        </div>
+        <div class="list" id="msgList"></div>
+        <div class="pager" id="mPager"></div>
+      </div>
+      <div class="panel" id="msgDetail">
+        <p class="sub">Select a message to read it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDERS PANE -->
+  <section class="pane" id="pane-orders" hidden>
+    <div class="panel" style="margin-bottom:18px">
+      <h2>Payments to approve</h2>
+      <div class="list" id="proofList"></div>
+    </div>
+    <div class="grid">
+      <div class="panel">
+        <h2>New order</h2>
+        <form id="orderForm">
+          <div class="field">Client email
+            <input id="oEmail" type="email" required maxlength="320">
+          </div>
+          <div class="field">Client name
+            <input id="oName" maxlength="200">
+          </div>
+          <div class="field">Package
+            <select id="oPackage"></select>
+          </div>
+          <div class="field">Total amount (₹)
+            <input id="oAmount" type="number" min="0" step="0.01" required>
+          </div>
+          <div class="field">Notes
+            <textarea id="oNotes" maxlength="5000"></textarea>
+          </div>
+          <div class="actions">
+            <button class="btn solid" type="submit">Create order</button>
+          </div>
+          <div class="msg" id="oMsg"></div>
+        </form>
+      </div>
+      <div>
+        <div class="toolbar">
+          <input id="oSearch" type="search" placeholder="Search client or package…" style="flex:1;min-width:160px">
+          <select id="oFilter">
+            <option value="">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="in_progress">In progress</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <span class="mono" id="oCount"></span>
+        </div>
+        <div class="list" id="oList"></div>
+        <div class="pager" id="oPager"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG PANE -->
+  <section class="pane" id="pane-blog" hidden>
+    <div class="grid">
+      <div class="panel">
+        <h2 id="bFormTitle">New post</h2>
+        <form id="blogForm">
+          <div class="field">Title
+            <input id="bTitle" maxlength="200" required>
+          </div>
+          <div class="field">Slug (web address, lowercase letters, numbers and dashes)
+            <input id="bSlug" maxlength="120" required pattern="[a-z0-9-]+">
+          </div>
+          <div class="field">Short excerpt
+            <input id="bExcerpt" maxlength="500">
+          </div>
+          <div class="field">Body
+            <textarea id="bBody" style="min-height:220px" maxlength="50000"></textarea>
+            <small class="mono">Use ## for a heading, **bold**, a line starting with - for a list, [link text](https://...) for a link, and the photo button below for images.</small>
+          </div>
+          <div class="field">Add a photo (it is inserted where your cursor is in the text)
+            <input type="file" id="bImage" accept="image/png,image/jpeg,image/webp,image/gif">
+            <small class="mono" id="bImgMsg"></small>
+          </div>
+          <label class="check"><input type="checkbox" id="bPublished"> Published (visible on the Blog page)</label>
+          <div class="actions">
+            <button class="btn solid" type="submit" id="bSave">Save post</button>
+            <button class="btn" type="button" id="bCancel" hidden>Cancel edit</button>
+          </div>
+          <div class="msg" id="bMsg"></div>
+        </form>
+      </div>
+      <div>
+        <div class="list" id="bList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANALYTICS PANE -->
+  <section class="pane" id="pane-analytics" hidden>
+    <div class="toolbar">
+      <select id="aDays">
+        <option value="7">Last 7 days</option>
+        <option value="30" selected>Last 30 days</option>
+        <option value="90">Last 90 days</option>
+      </select>
+      <span class="mono" id="aTotal"></span>
+    </div>
+    <div class="grid">
+      <div class="panel">
+        <h2>Views per day</h2>
+        <div id="aDaily"></div>
+      </div>
+      <div class="panel">
+        <h2>Top pages</h2>
+        <div id="aPaths"></div>
+      </div>
+    </div>
+  <div class="panel" style="margin-top:22px">
+    <h2>Browser errors</h2>
+    <p class="mono">Problems that happened in visitors' browsers, newest first.</p>
+    <div class="list" id="errList"></div>
+    <div class="actions" style="margin-top:12px"><button class="btn sm danger" id="errClear" type="button">Clear all</button></div>
+  </div>
+  </section>
+
+  <!-- SETTINGS PANE -->
+  <section class="pane" id="pane-settings" hidden>
+    <div class="panel" style="max-width:640px">
+      <h2>Site settings</h2>
+      <p class="sub">These values appear on the public pages.</p>
+      <form id="settingsForm">
+        <div class="field">Contact email
+          <input id="sContactEmail" type="email" maxlength="320">
+        </div>
+        <div class="field">Discord invite link
+          <input id="sDiscord" maxlength="300" placeholder="https://discord.gg/...">
+        </div>
+        <div class="field">LinkedIn link
+          <input id="sLinkedin" maxlength="300" placeholder="https://linkedin.com/in/...">
+        </div>
+        <div class="field">GitHub link
+          <input id="sGithub" maxlength="300" placeholder="https://github.com/...">
+        </div>
+        <div class="field">UPI ID (for customer payments)
+          <input id="sUpi" maxlength="100" placeholder="yourname@bank">
+        </div>
+        <div class="field">UPI payee name
+          <input id="sUpiName" maxlength="60" placeholder="Vishu">
+        </div>
+        <div class="field">Footer tagline
+          <input id="sFooter" maxlength="200" placeholder="Websites &amp; Discord bots">
+        </div>
+        <div class="actions"><button class="btn solid" type="submit">Save settings</button></div>
+        <div class="msg" id="sMsg"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ACCOUNTS PANE -->
+  <section class="pane" id="pane-accounts" hidden>
+    <div class="toolbar"><span class="mono">Emails only. Passwords are never shown. Deleting an account removes its login.</span></div>
+    <table class="table">
+      <thead><tr><th>Email</th><th>Role</th><th>Joined</th><th style="text-align:right">Action</th></tr></thead>
+      <tbody id="accRows"></tbody>
+    </table>
+  </section>
+
+  <!-- BACKUP PANE -->
+  <section class="pane" id="pane-backup" hidden>
+    <div class="panel" style="margin-bottom:22px">
+      <h2>Store backups</h2>
+      <p>A snapshot of packages, photos, settings, blog, orders and payments is saved every night automatically. The last 14 are kept. You can also save one now.</p>
+      <div class="actions"><button class="btn solid" id="backupNow" type="button">Save a backup now</button></div>
+      <p class="msg" id="backupMsg"></p>
+      <div class="list" id="backupList" style="margin-top:12px"></div>
+    </div>
+    <div class="backup">
+      <div class="panel">
+        <h2>Export backup</h2>
+        <p>Download all packages as a JSON file. Keep it as an extra copy, or use it to restore packages later.</p>
+        <button class="btn solid" id="exportBtn" type="button">Download JSON</button>
+      </div>
+      <div class="panel">
+        <h2>Import backup</h2>
+        <p>Load a JSON file made by this panel. It replaces the current packages.</p>
+        <input type="file" id="importFile" accept="application/json">
+        <div class="msg" id="importMsg" style="margin-top:12px"></div>
+      </div>
+    </div>
+
+    <div class="danger-zone">
+      <div>
+        <h2>Danger zone</h2>
+        <p class="sub">Remove every package from the store. This cannot be undone unless you have a backup.</p>
+      </div>
+      <button class="btn danger" id="clearBtn" type="button">Delete all packages</button>
+    </div>
+  </section>
+</main>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+<nav class="dock" id="dock" aria-label="Main navigation">
+  <span class="dock-pill" id="pill"></span>
+  <a href="index.html" data-id="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
+  <a href="store.html" data-id="store"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>Store</a>
+  <a href="services.html" data-id="services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z"/></svg>Services</a>
+  <a href="blog.html" data-id="blog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg>Blog</a>
+  <a href="about.html" data-id="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>About</a>
+  <a href="contact.html" data-id="contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg>Contact</a>
+  <a id="adminDock" href="admin.html" data-id="admin" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Admin</a>
+</nav>
+<script defer src="js/db.js"></script>
+<script defer src="js/admin.js"></script>
+<script defer src="js/dock.js"></script>
+</body>
+</html>
