@@ -1,8 +1,11 @@
 /* Offline support and fast repeat visits. Only files from this site are cached;
    the database and CDN are always fetched live. */
-const VERSION = 'v3';
+const VERSION = 'v4';
 const CACHE = 'vishu-' + VERSION;
-const CORE = ['index.html', 'css/common.css', 'favicon.png', 'brand/avatar.png', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
+const CORE = [
+  'index.html', 'css/common.css', 'favicon.png', 'brand/avatar.png',
+  'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png'
+];
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
