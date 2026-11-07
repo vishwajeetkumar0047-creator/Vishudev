@@ -1,9 +1,9 @@
 /* Offline support and fast repeat visits. Only files from this site are cached;
    the database and CDN are always fetched live. */
-const VERSION = 'v4';
+const VERSION = 'v5';
 const CACHE = 'vishu-' + VERSION;
 const CORE = [
-  'index.html', 'css/common.css', 'favicon.png', 'brand/avatar.png',
+  'offline.html', 'css/common.css', 'favicon.png', 'brand/avatar.png',
   'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png'
 ];
 
@@ -25,12 +25,23 @@ self.addEventListener('fetch', event => {
   const url = new URL(req.url);
   if(url.origin !== self.location.origin) return;          // database, CDN and fonts: always live
 
-  // pages: network first, so the latest content is shown; cached copy if offline
+  // pages: online -> the newest page (and keep a copy); offline -> the saved copy of THIS page,
+  // or the offline page. Never another page.
   if(req.mode === 'navigate'){
-    event.respondWith(fetch(req).catch(() => caches.match(req).then(r => r || caches.match('index.html'))));
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      try{
+        const res = await fetch(req);
+        if(res.ok) cache.put(req, res.clone());
+        return res;
+      }catch(err){
+        const saved = await cache.match(req);
+        return saved || cache.match('offline.html');
+      }
+    })());
     return;
   }
-  // styles, scripts, images: show the cached copy at once, refresh it in the background
+  // styles, scripts, images: show the saved copy at once, refresh it in the background
   if(/\.(css|js|svg|png|webmanifest)$/.test(url.pathname)){
     event.respondWith(caches.open(CACHE).then(async cache => {
       const cached = await cache.match(req);
