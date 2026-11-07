@@ -83,3 +83,10 @@ html[data-theme="dark"] .top.solid,html[data-theme="dark"] .top.solid.scrolled{b
 .strip p,.strip li,.strip span,.strip small,
 .card.dark p,.card.dark li,.card.dark span,.card.dark small,.card.dark .meta,
 .pkg.hot p,.pkg.hot li,.pkg.hot span,.pkg.hot small,.pkg.hot .extra{color:var(--bg)!important;opacity:.72}
+
+/* ===== INSTALL APP BUTTON =====
+   Add this block at the END of css/common.css */
+.site-footer .sf-install{font:inherit;font-size:12px;font-weight:600;letter-spacing:.04em;color:#0a0a0a;background:#C6601F;border:0;border-radius:999px;padding:8px 16px;cursor:pointer;margin-left:6px;transition:transform .25s cubic-bezier(.2,.7,.1,1),background .25s}
+.site-footer .sf-install:hover{transform:translateY(-2px);background:#d9703a}
+.site-footer .sf-install[hidden]{display:none}
+
